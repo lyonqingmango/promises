@@ -10,12 +10,47 @@
 
 var fs = require('fs');
 var Promise = require('bluebird');
+var promisification = require('./promisification');
+var constructor = require('./promiseConstructor');
+
+var pluckFirstLineFromFileAsync = constructor.pluckFirstLineFromFileAsync;
+var getStatusCodeAsync = constructor.getStatusCodeAsync;
+var getGitHubProfileAsync = promisification.getGitHubProfileAsync;
+var generateRandomTokenAsync = promisification.generateRandomTokenAsync;
+var readFileAndMakeItFunnyAsync = promisification.readFileAndMakeItFunnyAsync;
 
 
-
-var fetchProfileAndWriteToFile = function(readFilePath, writeFilePath) {
-  // TODO
+var fetchProfileAndWriteToFile = (readFilePath, writeFilePath) => {
+  return pluckFirstLineFromFileAsync(readFilePath)
+    .then((user) => {
+      return promisification.getGitHubProfileAsync(user);
+    })
+    .then((data)=>{
+      return fs.writeFileSync(writeFilePath, JSON.stringify(data));
+    });
 };
+
+
+// Promise.promisifyAll(db)
+
+// var addNewUserToDatabaseAsync = function(user) {
+//   // The outermost `return` lets us continue the chain
+//   // after an invocation of `addNewUserToDatabaseAsync`
+//   return db.findUserInDatabaseAsync(user)
+//     .then(function(existingUser) {
+//       if (existingUser) {
+//         throw new Error('User already exists!') // Head straight to `catch`. Do not pass Go, do not collect $200
+//       } else {
+//         return user; // Return a synchronous value
+//       }
+//     })
+//     .then(function(newUser) {
+//       return db.hashPasswordAsync(newUser) // Return a promise
+//     })
+//     .then(function(securedUser) {
+//       return db.createAndSaveUserAsync(securedUser) // Return another promise
+//     })
+// }
 
 // Export these functions so we can test them
 module.exports = {
