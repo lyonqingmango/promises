@@ -9,7 +9,6 @@ var http = require('http');
 // This function should retrieve the first line of the file at `filePath`
 var pluckFirstLineFromFile = function (filePath, callback) {
   fs.readFile(filePath, (err, content) => {
-
     if (err) {
       callback(err);
     } else {
@@ -17,8 +16,6 @@ var pluckFirstLineFromFile = function (filePath, callback) {
     }
   });
 };
-
-
 
 // This function should retrieve the status code of a GET request to `url`
 var getStatusCode = function (url, callback) {
@@ -30,12 +27,6 @@ var getStatusCode = function (url, callback) {
     }
   });
 };
-/*
-  needle.get('http://www.google.com', function(error, response) {
-    if (!error && response.statusCode == 200)
-      console.log(response.body);
-    });
-*/
 
 // Export these functions so we can test them and reuse them in later exercises
 module.exports = {
